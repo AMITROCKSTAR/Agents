@@ -2,7 +2,7 @@ import aiohttp
 import requests
 import asyncio
 
-api_key = "138b7e69f73bd092072b032de7d5c30d"
+api_key = "***************"
 url = "https://api.openweathermap.org/data/2.5/weather"
 
 async def weather_Agent(session,city:str):
