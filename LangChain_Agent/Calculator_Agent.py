@@ -33,7 +33,7 @@ def name_tool(query: str) -> str:
 # Weather Tool
 def get_weather(city: str) -> str:
     try:
-        API_KEY = "138b7e69f73bd092072b032de7d5c30d"  # replace with your key
+        API_KEY = "8888888"  # replace with your key
         url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
         resp = requests.get(url)
         data = resp.json()
