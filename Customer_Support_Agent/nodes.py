@@ -4,9 +4,14 @@ from langchain_core.messages import AIMessage
 from langchain_groq import ChatGroq
 from agent_state import AgentState
 from tools import tools
-
+import os
+from dotenv import load_dotenv 
+load_dotenv()
 ## LLM Setup
-llm = ChatGroq(model="llama-3.3-70b-versatile", temperature = 0)
+# from langchain_groq import ChatGroq
+
+llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0,groq_api_key=os.getenv("GROQ_API_KEY"))
+
 
 def prompt_node(state: AgentState)->AgentState:
     prompt = ChatPromptTemplate.from_messages([

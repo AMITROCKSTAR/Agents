@@ -13,7 +13,9 @@ app = build_agent_graph()
 
 # ?"
 # query = "raise a ticket for this issue"
-query = "order"
+# query = "Raise a ticket with id 3526"
+# query = "order the product with given product id 2"
+query = "Send email to stakeholder with message like we need few more details abour the requirements"
 
 final_state = app.invoke(
     {"messages":[HumanMessage(content=query)],"query":query,"result":""},
