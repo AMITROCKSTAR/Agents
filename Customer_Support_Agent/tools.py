@@ -7,36 +7,12 @@ from dotenv import load_dotenv
 import re
 import base64
 
+from Tools import Search_kb
 load_dotenv()
-
-# create the mail content
-msg = MIMEText("Hello , this is a est email", "plain")
-msg['Subject'] = "Test Email"
-msg["From"] = "sender@gmail.com"
-msg['To']="reciever@gmail.com"
-
 
 #Define Agent Tools
 
-def search_kb(query:str)->str:
-    url = "https://api.duckduckgo.com/"
-    params ={"q":query,"format":"json"}
-    
-    try:
-        r = requests.get(url,params = params,timeout=10)
-        r.raise_for_status()
-        data = r.json()
-        abstract = data.get("Abstract",)
-        if abstract:
-            return abstract
-        
-        related = data.get("related text",[])
-        if related:
-            return related[0].get("Text","No relavent input found")
-        return "No relavent input found"
-    
-    except Exception as e:
-        return f"Knowledge base error : {e}"
+# def search_kb(query:str)->str:
 
     
 def query_db(query:str)-> str:
@@ -71,7 +47,7 @@ def query_db(query:str)-> str:
 
 def create_ticket(issue:str)->str:
     try:
-        url = os.getenv("TICKET_API_URL", "https://jsonplaceholder.typicode.com/posts")
+        url = os.getenv("TICKET_API_URL", "https://amitrock9889.atlassian.net/rest/api/3/issue")
         token = os.getenv("TICKET_API_TOKEN", None)
         email = os.getenv("JIRA_EMAIL")
         print("token check",url)
@@ -92,6 +68,7 @@ def create_ticket(issue:str)->str:
             }
         }
         response = requests.post(url,json=payload, headers=headers)
+        print("response____",response)
         print("response",response.json())
         if response.status_code in (200,201):
             print("Token",token)
@@ -101,22 +78,46 @@ def create_ticket(issue:str)->str:
         return f"Key error: {e}" 
     
 
-def send_email(message:str)->str:
+def send_email(query:str)->str:
+    # recipient:str,subject:str,body:str
+    ## Use regex to find recipient , subject and body
+    ##query : "Send email to iamitkumar2007@gmail.com by saying your order has been successfully placed"
+    pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+    print("Pattern",pattern)
+    text = re.findall(pattern,query)
+    recipient = ','.join(text)
+    print("Recipient",str(recipient))
+    
+    ## Converting comma seperated string
+    query = query.split()
+    print("query",query)
+    ## Finding order status related value , like delivered,ordered,placed ,etc.
+    status = ["Ship","Shipped","Shipping","Order","Ordered","Placed","Place","Delivered","Delivery"]
+    matched_status = {"ship":"Shipped","shipped":"Shipped","order":"Ordered","ordered":"Ordered","placed":"Placed","delivered":"Delivered","delivery":"Delivered"}
+    status_value =""
+    for s in status:
+        
+        for q in query:
+            # print("---",q)
+            if q.upper()==s.upper():
+                status_value = s.lower()
+                break
+    
+    print("status_value",status_value)
+    body = f"Your order has been successfully {matched_status[status_value]}"
+    subject = f"Order Status"
     try:
-        sender = os.getenv("EMAIL_SENDER")
-        recipient = os.getenv("EMAIL_RECIPIENT")
+        msg = MIMEText(body)
+        msg["From"] = os.getenv("EMAIL_SENDER")
+        msg["To"] = recipient
+        msg["Subject"] = subject
         password = os.getenv("EMAIL_PASSWORD")
 
-        msg = MIMEText(message)
-
-        msg["Subject"] = "Support Response"
-        msg["From"] = sender
-        msg["To"] = recipient
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-             server.login(sender, password)
-             server.sendmail(sender, recipient, msg.as_string())
+             server.login(msg["From"], password)
+             server.send_message(msg)
 
-        return f"Email sent to {recipient}"
+        return {"status":"success","message":f"{body}"}
     except Exception as e:
        return f"Email failed: {str(e)}"
 
@@ -125,8 +126,9 @@ def send_email(message:str)->str:
 ## Tools dictionary
 
 tools = {
-    "KnowledgeBase": search_kb,
+    "KnowledgeBase": Search_kb.search_kb,
     "Database":query_db,
     "TicketingSystem": create_ticket,
     "Email": send_email
 }
+
