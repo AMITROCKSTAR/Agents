@@ -5,7 +5,7 @@ import sqlite3
 import os
 
 # create the mail content
-msg = MIMEText("Hello , this is a est email", "plain")
+msg = MIMEText("Hello , this is a test email", "plain")
 msg['Subject'] = "Test Email"
 msg["From"] = "sender@gmail.com"
 msg['To']="reciever@gmail.com"

@@ -13,7 +13,7 @@ app = build_agent_graph()
 
 # ?"
 # query = "raise a ticket for this issue"
-query = "order"
+query = "email"
 
 final_state = app.invoke(
     {"messages":[HumanMessage(content=query)],"query":query,"result":""},
