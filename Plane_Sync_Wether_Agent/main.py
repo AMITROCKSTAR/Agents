@@ -3,7 +3,7 @@ import requests
 
 def wether_agent(user_input):
 
-    api_key = "138b7e69f73bd092072b032de7d5c30d"
+    api_key = "8888888"
     url = "https://api.openweathermap.org/data/2.5/weather"
     params ={
               "q":user_input,

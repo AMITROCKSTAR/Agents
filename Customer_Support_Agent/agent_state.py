@@ -6,3 +6,5 @@ class AgentState(TypedDict):
     messages: Annotated[List[AnyMessage],"Conversation History"]
     query: str
     result: str
+    selected_tool:str
+    tool_reason:str
