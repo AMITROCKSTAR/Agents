@@ -14,7 +14,8 @@ kb = [
     "Where can I check my order status?",
     "How to contact customer support?",
     "What is the refund policy",
-    "How to update my billing information?"
+    "Escalating you billing related issue to customer executive",
+    "Around 4-5 working days it takes to escalate refund"
 ]
 
 # Encode all KB entries 

@@ -16,9 +16,23 @@ llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0,groq_api_key=os.ge
 
 def prompt_node(state: AgentState)->AgentState:
     prompt = ChatPromptTemplate.from_messages([
-        ("system","You are helpful customer support AI. Decide which tools to call based on user's query."
-         "Reply ONLY in this JSON format: "
-         '{{"tool": "KnowledgeBase/Database/TicketingSystem/Email","reason":"short explanation"}}'),
+        ("system","You are a smart assistant that routes user queries to the correct tool."
+        """ Available tools:
+                             1. KnowledgeBase - For answering FAQs, support information, policies, product info, or general help.
+                             2. TicketingSystem - For creating, updating, or checking support tickets.
+                             3. Database - For checking order details, order status, or database lookups.
+                             4. Email - For sending emails or notifications.
+
+                             Classify the user's intent carefully:
+                             - If the query is informational (e.g., "customer support", "return policy", "refund help"), use Knowledge_Base.
+                             - If the user requests help, complains, or wants a ticket created (e.g., "raise a complaint", "file a support ticket"), use Ticketing_System.
+                             - If the query mentions order ID, shipment, or database keywords (e.g., "order 12345", "my purchase"), use Database_Query.
+                             - If the query involves sending an email (e.g., "email me confirmation"), use Email_System.
+
+                             
+                        
+         Reply ONLY in this JSON format: 
+         {{"tool": "KnowledgeBase/Database/TicketingSystem/Email","reason":"short explanation"}}"""),
         ("human","{query}")
 
     ])

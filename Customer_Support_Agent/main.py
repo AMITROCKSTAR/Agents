@@ -15,7 +15,9 @@ query =[
     "Send email to iamitkumar2007@gmail.com by saying your order has been successfully placed",
     "I want my refund",
     "Customer support",
-    "How to contact customer support"
+    "After how many days refund gets issued?",
+    "How to update billing information?",
+    "Contact customer support"
 ]
 
 # ?"
