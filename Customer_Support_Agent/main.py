@@ -1,36 +1,28 @@
 # Run the Agent
-
+from fastapi import FastAPI,Form
+from fastapi.responses import JSONResponse
 from langchain_core.messages import HumanMessage
 from graph_builder import build_agent_graph
+import uvicorn
 
 app = build_agent_graph()
 
-# query = "What is refund pol
+api = FastAPI(title="Customer Support Agent API")
 
+@api.post("/query/")
+def user_query(query: str = Form(...)):
+    try:
+        final_state = app.invoke(
+            {"messages":[HumanMessage(content=query)],"query":query,"result":""},
+            config={"configurable":{"thread_id":"cust-123"}}
+        )
+        return JSONResponse({
+            "query": query,
+            "response": final_state["result"]
+        })
+    except Exception as e:
+        return JSONResponse({"error": str(e)}, status_code=500)
+    
 
-
-query =[
-    "Raise a ticket with id 3526",
-    "order the product with given product id 2",
-    "Send email to iamitkumar2007@gmail.com by saying your order has been successfully placed",
-    "I want my refund",
-    "Customer support",
-    "After how many days refund gets issued?",
-    "How to update billing information?",
-    "Contact customer support"
-]
-
-# ?"
-# query = "raise a ticket for this issue"
-# query = "Raise a ticket with id 3526"
-# query = "order the product with given product id 2"
-# query = "Send email to stakeholder with message like we need few more details abour the requirements"
-# query = "Customer support"
-
-for q in query:
-
-    final_state = app.invoke(
-        {"messages":[HumanMessage(content=query)],"query":q,"result":""},
-         config = {"configurable":{"thread_id":"cust-123"}}
-    )
-    print("Final Answer:  ",final_state["result"])
+if __name__ == "__main__":
+    uvicorn.run("main:api", host="127.0.0.0", port=8000, reload=True)
