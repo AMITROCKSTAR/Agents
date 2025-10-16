@@ -22,14 +22,10 @@ query =[
 
 # ?"
 # query = "raise a ticket for this issue"
-<<<<<<< HEAD
-query = "email"
-=======
 # query = "Raise a ticket with id 3526"
 # query = "order the product with given product id 2"
 # query = "Send email to stakeholder with message like we need few more details abour the requirements"
 # query = "Customer support"
->>>>>>> a2fb18ed5c20ef7939c7fbf1e9fce7a9bb5d36c5
 
 for q in query:
 
