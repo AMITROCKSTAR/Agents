@@ -1,3 +1,6 @@
-sqlite3
+fastapi
+uvicorn
+chromadb
+pypdf2
+sentence-transformers
 langchain
-langgraph

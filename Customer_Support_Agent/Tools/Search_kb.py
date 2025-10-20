@@ -1,8 +1,5 @@
-from sentence_transformers import SentenceTransformer
-import faiss
-import numpy as np
-from Embedding_model import embedding_model
-from Ingest_docs import query_text
+
+from Vector_Store.Ingest_docs import query_text
 
 
 def search_kb(query:str, top_k: int =1):
